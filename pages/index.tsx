@@ -1,8 +1,8 @@
-import { Stack } from '@mantine/core';
-import { Title } from '@mantine/core';
-import { Pagination } from '@mantine/core';
+import { Stack } from '@mantine/core'
+import { Title } from '@mantine/core'
+import { Pagination } from '@mantine/core'
 
-import Petition from '../components/Petition';
+import Petition from '../components/Petition'
 
 const data = [
     {

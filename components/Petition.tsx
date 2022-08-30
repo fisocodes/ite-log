@@ -1,8 +1,8 @@
-import { Card } from "@mantine/core";
-import { Stack } from "@mantine/core";
-import { Group } from "@mantine/core";
-import { Title } from "@mantine/core";
-import { Button } from "@mantine/core";
+import { Card } from "@mantine/core"
+import { Stack } from "@mantine/core"
+import { Group } from "@mantine/core"
+import { Title } from "@mantine/core"
+import { Button } from "@mantine/core"
 
 export default function Petition({data}){
     return <Card shadow="md">

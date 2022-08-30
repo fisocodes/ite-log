@@ -1,8 +1,8 @@
-import { Header } from "@mantine/core";
-import { Title } from "@mantine/core";
-import { Group } from "@mantine/core";
+import { Header } from "@mantine/core"
+import { Title } from "@mantine/core"
+import { Group } from "@mantine/core"
 
-import Image from "next/image";
+import Image from "next/image"
 
 export default function CustomHeader(){
     return <Header height={60} p="sm">
