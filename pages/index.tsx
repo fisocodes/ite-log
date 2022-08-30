@@ -2,6 +2,7 @@ import { Stack } from '@mantine/core'
 import { Title } from '@mantine/core'
 import { Pagination } from '@mantine/core'
 
+
 import Petition from '../components/Petition'
 
 const data = [
@@ -27,10 +28,29 @@ const data = [
     },
 ]
 
-export default function Home(){
+export default function Home(props){
     return <Stack>
         <Title order={1}>Pendientes</Title>
         {data.map(petition => <Petition data={petition}/>)}
         <Pagination total={10} position="center"/>
     </Stack>
+}
+
+export async function getServerSideProps(context) {
+    
+    const session = true
+
+    if(!session){
+        return {
+            redirect : {
+                destination: '/login',
+                permanent: false
+            }
+        }
+    }
+
+
+    return {
+        props:{sess: session}
+    }
 }
