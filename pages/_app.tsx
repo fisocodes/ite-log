@@ -1,3 +1,8 @@
+/*
+    Custom app. This layout is applied to
+    every page in the app
+*/
+
 import { useMantineTheme } from "@mantine/core"
 import { useRouter } from "next/router"
 
