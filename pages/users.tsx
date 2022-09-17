@@ -12,7 +12,7 @@ import { GetServerSideProps } from 'next'
 import { getSession } from 'next-auth/react'
 
 //Mantine
-import { Title } from "@mantine/core"
+import { Title } from '@mantine/core'
 
 export default function Users(){
     return <Title>Usuarios</Title>

@@ -1,3 +1,10 @@
+/**
+ * Database users methods
+ * @author Oscar Figueroa
+ * @version 1.0.0
+ * September 16, 2022
+ */
+
 import { getDatabase } from "./database";
 
 const getUsers = async () => {

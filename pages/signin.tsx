@@ -17,14 +17,14 @@ import { getSession } from 'next-auth/react'
 import { signIn } from 'next-auth/react'
 
 //Mantine
-import { useForm } from "@mantine/form"
-import { Center } from "@mantine/core"
-import { Stack } from "@mantine/core"
-import { Image } from "@mantine/core"
-import { Title } from "@mantine/core"
-import { TextInput } from "@mantine/core"
-import { PasswordInput } from "@mantine/core"
-import { Button } from "@mantine/core"
+import { useForm } from '@mantine/form'
+import { Center } from '@mantine/core'
+import { Stack } from '@mantine/core'
+import { Image } from '@mantine/core'
+import { Title } from '@mantine/core'
+import { TextInput } from '@mantine/core'
+import { PasswordInput } from '@mantine/core'
+import { Button } from '@mantine/core'
 
 export default () => {
 
@@ -62,15 +62,15 @@ export default () => {
         }
     }
 
-    return <Center p="xl">
-        <Stack align="stretch" spacing="lg">
-            <Title order={2} align="center">Soporte Técnico</Title>
-            <Image width="40vh" src="https://www.ensenada.tecnm.mx/wp-content/themes/tecnm/images/logo-ensenada.png"/>
+    return <Center p='xl'>
+        <Stack align='stretch' spacing='lg'>
+            <Title order={2} align='center'>Soporte Técnico</Title>
+            <Image width="40vh" src='https://www.ensenada.tecnm.mx/wp-content/themes/tecnm/images/logo-ensenada.png'/>
             <form onSubmit={handleSubmit}>
                 <Stack>
-                    <TextInput required placeholder="usuario@ite.edu.mx" type="email" {...form.getInputProps('email')}/>
-                    <PasswordInput required placeholder="Contraseña" {...form.getInputProps('password')}/>
-                    <Button type="submit" loading={loadSubmit}>Login</Button>
+                    <TextInput required placeholder='usuario@ite.edu.mx' type='email' {...form.getInputProps('email')}/>
+                    <PasswordInput required placeholder='Contraseña' {...form.getInputProps('password')}/>
+                    <Button type='submit' loading={loadSubmit}>Login</Button>
                 </Stack>
             </form>
         </Stack>

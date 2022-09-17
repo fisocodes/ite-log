@@ -1,3 +1,10 @@
+/**
+ * Database connection
+ * @author Oscar Figueroa
+ * @version 1.0.0
+ * September 16, 2022
+ */
+
 import { Database } from 'sqlite-async'
 
 const getDatabase = async () => {

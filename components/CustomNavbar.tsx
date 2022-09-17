@@ -1,5 +1,5 @@
 /**
- * Sign in page
+ * Custom navbar component
  * @author Oscar Figueroa
  * @version 1.0.0
  * September 16, 2022
@@ -38,20 +38,20 @@ export default function CustomNavbar(){
     }, [status])
 
     return <Navbar width={{ base: 200 }}>
-        <Stack justify="space-between" style={{height: "100%"}} pb="xl" pt="xl">
-            <Stack spacing="xs">
+        <Stack justify='space-between' style={{height: '100%'}} pb='xl' pt='xl'>
+            <Stack spacing='xs'>
                 <Center>
-                    <Stack align="center">
-                        <Avatar size={125} radius="xs">
+                    <Stack align='center'>
+                        <Avatar size={125} radius='xs'>
                             {`${user?.name[0].toUpperCase()}${user?.lastname[0].toUpperCase()}`}
                         </Avatar>
                         <Title order={4}>{`${user?.name} ${user?.lastname}`}</Title>
                     </Stack>
                 </Center>
-                <NavLink onClick={() => router.push('/users')} label="Usuarios"/>
+                <NavLink onClick={() => router.push('/users')} label='Usuarios'/>
             </Stack>
             <Stack spacing={0}>
-                <NavLink onClick={() => signOut()} label="Cerrar sesión" color="red" active variant="subtle"/>
+                <NavLink onClick={() => signOut()} label='Cerrar sesión' color='red' active variant='subtle'/>
             </Stack>
         </Stack>
     </Navbar>
