@@ -1,5 +1,5 @@
 /**
- * Index page
+ * Users page
  * @author Oscar Figueroa
  * @version 1.0.0
  * September 16, 2022
@@ -12,10 +12,10 @@ import { GetServerSideProps } from 'next'
 import { getSession } from 'next-auth/react'
 
 //Mantine
-import { Title } from '@mantine/core'
+import { Title } from "@mantine/core"
 
-export default () => {
-    return <Title>Home</Title>
+export default function Users(){
+    return <Title>Usuarios</Title>
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

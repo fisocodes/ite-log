@@ -1,3 +1,5 @@
+import { useMantineTheme } from "@mantine/core"
+
 import { Header } from "@mantine/core"
 import { Title } from "@mantine/core"
 import { Group } from "@mantine/core"
@@ -5,6 +7,9 @@ import { Group } from "@mantine/core"
 import Image from "next/image"
 
 export default function CustomHeader(){
+
+    const theme = useMantineTheme()
+
     return <Header height={60} p="sm">
         <Group position="apart">
             <Title order={3}>Servicio Técnico</Title>

@@ -3,25 +3,32 @@
     every page in the app
 */
 
-import { useMantineTheme } from "@mantine/core"
+//Next
 import { useRouter } from "next/router"
 
+//NextAuth
+import { SessionProvider } from 'next-auth/react'
+
+//Mantine
 import { MantineProvider } from "@mantine/core"
 import { AppShell } from "@mantine/core"
 
+//Custom components
 import CustomHeader from "../components/CustomHeader"
 import CustomNavbar from "../components/CustomNavbar"
 
-export default function Log({Component, pageProps}){
-    const theme = useMantineTheme()
+export default ({Component, pageProps: {session, ...pageProps}}) => {
+
     const router = useRouter()
 
-    const isLogin = router.pathname === '/login'
+    const isLogin = router.pathname === '/signin'
 
-    return <MantineProvider theme={{black: theme.colors.gray[9]}} withGlobalStyles withNormalizeCSS>
-    <AppShell header={isLogin ? null : <CustomHeader/>} navbar={isLogin ? null : <CustomNavbar/>}>
-        <Component {...pageProps}/>
-    </AppShell> 
-    </MantineProvider>
+    return <SessionProvider session={session}>
+        <MantineProvider withGlobalStyles withNormalizeCSS>
+            <AppShell header={isLogin ? null : <CustomHeader/>} navbar={isLogin ? null : <CustomNavbar/>}>
+                <Component {...pageProps}/>
+            </AppShell> 
+        </MantineProvider>
+    </SessionProvider> 
     
 }
