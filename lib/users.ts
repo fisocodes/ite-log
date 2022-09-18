@@ -9,7 +9,7 @@ import { getDatabase } from "./database";
 
 const getUsers = async () => {
     const database = await getDatabase()
-    const users = database.get('SELECT * FROM users', [])
+    const users = database.all('SELECT * FROM users', [])
     return users
 }
 
