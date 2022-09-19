@@ -6,12 +6,12 @@
  */
 
 //Next
-import type { NextApiRequest } from "next"
-import type { NextApiResponse } from "next"
+import type { NextApiRequest } from 'next'
+import type { NextApiResponse } from 'next'
 
 //Custom libraries
-import { getUsers } from "../../../lib/users"
-import { createUser } from "../../../lib/users"
+import { getUsers } from '../../../lib/users'
+import { createUser } from '../../../lib/users'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
 
