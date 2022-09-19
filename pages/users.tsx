@@ -19,13 +19,16 @@ import { Title } from '@mantine/core'
 import { Stack } from '@mantine/core'
 import { Group } from '@mantine/core'
 import { Button } from '@mantine/core'
+import { ActionIcon } from '@mantine/core'
 import { Table } from '@mantine/core'
 
 //Icons
 import { IconUserPlus } from '@tabler/icons'
+import { IconUserMinus } from '@tabler/icons'
 
 //Custom components
 import NewUserModal from '../components/NewUserModal'
+import DeleteUserModal from '../components/DeleteUserModal'
 
 //Custom lib
 import { getUsers } from '../lib/users';
@@ -33,6 +36,13 @@ import { getUsers } from '../lib/users';
 export default function Users({users}){
 
     const [openNew, setOpenNew] = useState(false)
+    const [openDelete, setOpenDelete] = useState(false)
+    const [userDelete, setUserDelete] = useState({})
+
+    const handleDeleteUser = (user) => {
+        setUserDelete(user)
+        setOpenDelete(true)
+    }
 
     return <Stack>
         <Title>Usuarios</Title>
@@ -40,6 +50,7 @@ export default function Users({users}){
            <Button leftIcon={<IconUserPlus/>} onClick={() => setOpenNew(true)}>Nuevo</Button> 
         </Group>
         <NewUserModal opened={openNew} setOpened={setOpenNew}/>
+        <DeleteUserModal opened={openDelete} setOpened={setOpenDelete} user={userDelete}/>
         <Table striped highlightOnHover>
             <thead>
                 <tr>
@@ -57,6 +68,13 @@ export default function Users({users}){
                             <td>{user.name}</td>
                             <td>{user.lastname}</td>
                             <td>{user.email}</td>
+                            <td>
+                                {
+                                    <ActionIcon color='red' variant='filled' onClick={() => handleDeleteUser(user)}>
+                                        <IconUserMinus/>
+                                    </ActionIcon>
+                                }
+                            </td>
                         </tr>
                     )
                 }
