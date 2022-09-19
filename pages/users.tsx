@@ -19,6 +19,7 @@ import { getSession } from 'next-auth/react'
 import { Title } from '@mantine/core'
 import { Stack } from '@mantine/core'
 import { Center } from '@mantine/core'
+import { ScrollArea } from '@mantine/core'
 import { Group } from '@mantine/core'
 import { Button } from '@mantine/core'
 import { ActionIcon } from '@mantine/core'
@@ -32,9 +33,6 @@ import { IconUserMinus } from '@tabler/icons'
 //Custom components
 import NewUserModal from '../components/NewUserModal'
 import DeleteUserModal from '../components/DeleteUserModal'
-
-//Custom lib
-import { getUsers } from '../lib/users';
 
 //Axios
 const axios = require('axios').default
@@ -88,35 +86,38 @@ export default function Users(){
                 <Loader size='xl'/>
             </Center>
             :
-            <Table striped highlightOnHover>
-                <thead>
-                    <tr>
-                        <th>Rol</th>
-                        <th>Nombre</th>
-                        <th>Apellido</th>
-                        <th>Correo</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        tableUsers.map(user => 
-                            <tr key={user.id}>
-                                <td>{user.role}</td>
-                                <td>{user.name}</td>
-                                <td>{user.lastname}</td>
-                                <td>{user.email}</td>
-                                <td>
-                                    {
-                                        <ActionIcon color='red' variant='filled' onClick={() => handleDeleteUser(user)}>
-                                            <IconUserMinus/>
-                                        </ActionIcon>
-                                    }
-                                </td>
-                            </tr>
-                        )
-                    }
-                </tbody>
-            </Table>
+            <ScrollArea>
+
+                <Table striped highlightOnHover>
+                    <thead>
+                        <tr>
+                            <th>Rol</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Correo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            tableUsers.map(user => 
+                                <tr key={user.id}>
+                                    <td>{user.role}</td>
+                                    <td>{user.name}</td>
+                                    <td>{user.lastname}</td>
+                                    <td>{user.email}</td>
+                                    <td>
+                                        {
+                                            <ActionIcon color='red' variant='filled' onClick={() => handleDeleteUser(user)}>
+                                                <IconUserMinus/>
+                                            </ActionIcon>
+                                        }
+                                    </td>
+                                </tr>
+                            )
+                        }
+                    </tbody>
+                </Table>
+            </ScrollArea>
         } 
     </Stack>
 }
