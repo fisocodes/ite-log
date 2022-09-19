@@ -1,7 +1,7 @@
 {
   "name": "bitacora",
   "version": "1.0.0",
-  "description": "Bitacora para soporte técnico",
+  "description": "Bitácora para soporte técnico",
   "main": "index.js",
   "scripts": {
     "dev": "next dev",
@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "next lint"
   },
-  "author": "",
+  "author": "Oscar Figueroa",
   "license": "ISC",
   "dependencies": {
     "@emotion/react": "^11.10.0",
