@@ -7,6 +7,7 @@
 
 //React
 import { useState } from 'react'
+import { useEffect } from 'react'
 
 //Next
 import { GetServerSideProps } from 'next'
@@ -33,16 +34,40 @@ import DeleteUserModal from '../components/DeleteUserModal'
 //Custom lib
 import { getUsers } from '../lib/users';
 
+//Axios
+const axios = require('axios').default
+
 export default function Users({users}){
 
+    const [tableUsers, setTableUsers] = useState(users)
     const [openNew, setOpenNew] = useState(false)
     const [openDelete, setOpenDelete] = useState(false)
     const [userDelete, setUserDelete] = useState({})
 
     const handleDeleteUser = (user) => {
+
         setUserDelete(user)
         setOpenDelete(true)
+
     }
+
+    //Update users table
+    useEffect(
+        () => {
+
+            const getUsers = async () => {
+
+                const response = await axios.get('http://localhost:3000/api/users')
+                const users = response.data
+                setTableUsers(users)
+
+            }
+
+            getUsers()
+
+        },
+        [openNew, openDelete]
+    )
 
     return <Stack>
         <Title>Usuarios</Title>
@@ -62,7 +87,7 @@ export default function Users({users}){
             </thead>
             <tbody>
                 {
-                    users.map(user => 
+                    tableUsers.map(user => 
                         <tr key={user.id}>
                             <td>{user.role}</td>
                             <td>{user.name}</td>

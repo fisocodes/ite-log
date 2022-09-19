@@ -5,11 +5,9 @@
  * September 18, 2022
  */
 
-
 //Next
 import type { NextApiRequest } from "next"
 import type { NextApiResponse } from "next"
-
 
 //Custom libraries
 import { getUsers } from "../../../lib/users"
@@ -17,20 +15,23 @@ import { createUser } from "../../../lib/users"
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
 
-    if(req.method === 'GET'){
+    switch(req.method){
 
-        const users = await getUsers(req.query)
-        res.json(users)
+        case 'GET':
 
-    }if(req.method === 'POST'){
+            const users = await getUsers(req.query)
+            res.json(users)
+            break
 
-        const result = await createUser(req.body)
-        res.send(result)
+        case 'POST':
 
-    }
-    else{
+            const result = await createUser(req.body)
+            res.send(result)
+            break
 
-        res.send('Method not available!...')
+        default:
+
+            res.send('Method not available!...')
 
     }
 }
