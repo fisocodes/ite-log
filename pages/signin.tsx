@@ -23,7 +23,6 @@ import { Stack } from '@mantine/core'
 import { Image } from '@mantine/core'
 import { Title } from '@mantine/core'
 import { TextInput } from '@mantine/core'
-import { PasswordInput } from '@mantine/core'
 import { Button } from '@mantine/core'
 
 export default () => {
@@ -35,7 +34,6 @@ export default () => {
         {
             initialValues: {
                 email: '',
-                password: ''
             },
             validate: {
                 email: (value) => (/[a-zA-Z0-9]+@ite\.edu\.mx/.test(value) ? null : 'Correo inválido: Debe ser de tipo @ite.edu.mx')
@@ -48,20 +46,18 @@ export default () => {
         setLoadSubmit(true)
         
         const response = await signIn(
-            'credentials',
+            'email',
             {
                 redirect: false,
                 callbackUrl: '/',
                 email: values.email,
-                password: values.password
             }
         )
         
         if(response.error){
             form.setErrors(
                 {
-                    email: 'Credenciales no válidas',
-                    password: ' '
+                    email: 'Correo no válido',
                 }
             )
         }else{
@@ -78,8 +74,7 @@ export default () => {
             <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
                 <Stack>
                     <TextInput required placeholder='usuario@ite.edu.mx' type='email' {...form.getInputProps('email')}/>
-                    <PasswordInput required placeholder='Contraseña' {...form.getInputProps('password')}/>
-                    <Button type='submit' loading={loadSubmit}>Login</Button>
+                    <Button type='submit' loading={loadSubmit}>Verificar correo</Button>
                 </Stack>
             </form>
         </Stack>

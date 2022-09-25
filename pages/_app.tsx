@@ -23,13 +23,24 @@ export default ({Component, pageProps: {session, ...pageProps}}) => {
 
     const router = useRouter()
 
-    const isLogin = router.pathname === '/signin'
+    const isLogin = router.pathname === '/signin' 
+                    || router.pathname === '/welcome' 
+                    || router.pathname === '/verify' 
+                    || router.pathname === '/error'
 
     return <SessionProvider session={session}>
         <MantineProvider withGlobalStyles withNormalizeCSS>
-            <AppShell header={isLogin ? null : <CustomHeader/>} navbar={isLogin ? null : <CustomNavbar/>}>
-                <Component {...pageProps}/>
-            </AppShell> 
+            {
+                isLogin ?
+                <AppShell>
+                    <Component {...pageProps}/>
+                </AppShell>
+                :
+                <AppShell header={<CustomHeader/>} navbar={<CustomNavbar/>}>
+                    <Component {...pageProps}/>
+                </AppShell>
+            }
+            
         </MantineProvider>
     </SessionProvider> 
     

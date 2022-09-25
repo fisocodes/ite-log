@@ -5,11 +5,12 @@
  * September 16, 2022
  */
 
-import { Database } from 'sqlite-async'
+//Prisma
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
 
-const getDatabase = async () => {
-    const database = await Database.open(`${process.env.DATABASE_ROUTE}`)
-    return database
+const getDatabase =  () => {
+    return prisma
 }
 
 export { getDatabase }

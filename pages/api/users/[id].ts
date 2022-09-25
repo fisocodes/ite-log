@@ -5,30 +5,33 @@
  * September 18, 2022
  */
 
-
 //Next
-import type { NextApiRequest } from "next"
-import type { NextApiResponse } from "next"
+import type { NextApiRequest } from 'next'
+import type { NextApiResponse } from 'next'
 
-//Custom libraries
-import { getUserById } from "../../../lib/users"
-import { deleteUserById } from "../../../lib/users"
+//Custom libs
+import { updateUser } from '../../../lib/users'
+import { deleteUser } from '../../../lib/users'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
 
-    if(req.method === 'GET'){
+    switch(req.method){
+        
+        case 'PUT':
+            
+            const updatedUser = await updateUser(req.body)
+            res.json(updatedUser)
+            break
+        
+        case 'DELETE':
 
-        const user = await getUserById(req.query.id)
-        res.json(user)
+            const deletedUser = await deleteUser(req.query)
+            res.json(deletedUser)
+            break
 
-    }if(req.method === 'DELETE'){
+        default:
 
-        const result = await deleteUserById(req.query.id)
-        res.send(result)
-
-    }else{
-
-        res.send('Method not available!...')
+            res.send('Method not available!...')
 
     }
     

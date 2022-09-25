@@ -11,7 +11,6 @@ import type { NextApiResponse } from 'next'
 
 //Custom libraries
 import { getUsers } from '../../../lib/users'
-import { createUser } from '../../../lib/users'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
 
@@ -19,14 +18,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
         case 'GET':
 
-            const users = await getUsers(req.query)
+            const users = await getUsers(req.body)
             res.json(users)
-            break
-
-        case 'POST':
-
-            const result = await createUser(req.body)
-            res.send(result)
             break
 
         default:

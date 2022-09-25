@@ -17,7 +17,7 @@ import { signOut } from 'next-auth/react'
 import { useSession } from 'next-auth/react'
 
 //Mantine
-import { useMantineTheme } from '@mantine/core'
+import { useForceUpdate } from '@mantine/hooks'
 import { Navbar } from '@mantine/core'
 import { NavLink } from '@mantine/core'
 import { Avatar } from '@mantine/core'
@@ -33,15 +33,17 @@ import { IconLayoutDashboard } from '@tabler/icons'
 
 export default function CustomNavbar(){
 
-    const theme = useMantineTheme()
     const router = useRouter()
     const {data: session, status} = useSession()
     const [user, setUser] = useState(null)
-
+    const forceUpdate = useForceUpdate()
+    
     useEffect(() => {
+        
         if(status == 'authenticated'){
             setUser(session.user)
         }
+        
     }, [status])
 
     return <Navbar width={{ base: 200 }}>

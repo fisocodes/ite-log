@@ -5,108 +5,51 @@
  * September 16, 2022
  */
 
-//Bcrypt
-const bcrypt = require('bcrypt')
+//Custom libs
+import { getDatabase } from "./database"
+const database = getDatabase()
 
-//Custom libraries
-import { getDatabase } from "./database";
+const getUsers = async (query) => {
 
-const getUsers = async (query = {}) => {
-
-    let queryString = ''
-    let params = []
-
-    if(Object.keys(query).length !== 0){
-
-        queryString += 'WHERE '
-
-        for(const param in query){
-
-            queryString += `${param} = ? AND`
-            params.push(query[param])
-
+    const users = await database.user.findMany(
+        {
+            where: {...query}               
         }
-
-        queryString = queryString.slice(0, -3)
-
-    }
-
-    const database = await getDatabase()
-    const users = database.all(
-        `SELECT * FROM users ${queryString}`,
-        params
     )
+
     return users
 
 }
 
-const getUserById = async (id) => {
-
-    const database = await getDatabase()
-    const user = database.get(
-        'SELECT * FROM users WHERE id = ?',
-        [id]
+const updateUser = async(query) => {
+    
+    const user = await database.user.update(
+        {
+            where: {
+                id: query.id
+            },
+            data: query
+        },
     )
+
     return user
-
 }
 
-const getUserByEmail = async (email) => {
+const deleteUser = async (query) => {
 
-    const database = await getDatabase()
-    const user = database.get(
-        'SELECT * FROM users WHERE email = ?',
-        [email]
-    )
-    return user
-
-}
-
-const createUser = async (user) => {
-
-    const encryptedPassword = await bcrypt.hash(user.password, 12)
-
-    const database = await getDatabase()
-    const result = await database.run(
-        'INSERT INTO users (role, name, lastname, email, password) VALUES(?,?,?,?,?)',
-        [user.role, user.name, user.lastname, user.email, encryptedPassword]
+    const user = await database.user.delete(
+        {
+            where: {...query}
+        }
     )
 
-    return result
-
-}
-
-const deleteUserById = async (id) => {
-
-    const database = await getDatabase()
-    const result = await database.run(
-        'DELETE FROM users WHERE id = ?',
-        [id]
-    )
-
-    return result
-
-}
-
-const deleteUserByEmail = async (email) => {
-
-    const database = await getDatabase()
-    const result = await database.run(
-        'DELETE FROM users WHERE email = ?',
-        [email]
-    )
-
-    return result
-
+    return user;
 }
 
 export {
 
     getUsers,
-    getUserById,
-    getUserByEmail,
-    createUser,
-    deleteUserById,
-    deleteUserByEmail
+    updateUser,
+    deleteUser,
 
 }

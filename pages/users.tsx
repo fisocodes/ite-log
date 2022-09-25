@@ -29,6 +29,7 @@ import { Loader } from '@mantine/core'
 //Icons
 import { IconUserPlus } from '@tabler/icons'
 import { IconUserMinus } from '@tabler/icons'
+import { IconEdit } from '@tabler/icons'
 
 //Custom components
 import NewUserModal from '../components/NewUserModal'
@@ -87,7 +88,6 @@ export default function Users(){
             </Center>
             :
             <ScrollArea>
-
                 <Table striped highlightOnHover>
                     <thead>
                         <tr>
@@ -105,6 +105,13 @@ export default function Users(){
                                     <td>{user.name}</td>
                                     <td>{user.lastname}</td>
                                     <td>{user.email}</td>
+                                    <td>
+                                        {
+                                            <ActionIcon variant='filled'>
+                                                <IconEdit/>
+                                            </ActionIcon>
+                                        }
+                                    </td>
                                     <td>
                                         {
                                             <ActionIcon color='red' variant='filled' onClick={() => handleDeleteUser(user)}>
