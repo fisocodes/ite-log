@@ -20,20 +20,17 @@ import { Title } from '@mantine/core'
 import { Stack } from '@mantine/core'
 import { Center } from '@mantine/core'
 import { ScrollArea } from '@mantine/core'
-import { Group } from '@mantine/core'
-import { Button } from '@mantine/core'
 import { ActionIcon } from '@mantine/core'
 import { Table } from '@mantine/core'
 import { Loader } from '@mantine/core'
 
 //Icons
-import { IconUserPlus } from '@tabler/icons'
 import { IconUserMinus } from '@tabler/icons'
 import { IconEdit } from '@tabler/icons'
 
 //Custom components
-import NewUserModal from '../components/NewUserModal'
 import DeleteUserModal from '../components/DeleteUserModal'
+import EditUserModal from '../components/EditUserModal'
 
 //Axios
 const axios = require('axios').default
@@ -41,15 +38,22 @@ const axios = require('axios').default
 export default function Users(){
 
     const [tableUsers, setTableUsers] = useState([])
-    const [openNew, setOpenNew] = useState(false)
     const [openDelete, setOpenDelete] = useState(false)
-    const [userDelete, setUserDelete] = useState({})
+    const [openEdit, setOpenEdit] = useState(false)
+    const [user, setUser] = useState({})
     const [loader, setLoader] = useState(false)
 
     const handleDeleteUser = (user) => {
 
-        setUserDelete(user)
+        setUser(user)
         setOpenDelete(true)
+
+    }
+
+    const handleEditUser = (user) => {
+
+        setUser(user)
+        setOpenEdit(true)
 
     }
 
@@ -71,16 +75,13 @@ export default function Users(){
             setLoader(false)
 
         },
-        [openNew, openDelete]
+        [openDelete, openEdit]
     )
 
     return <Stack>
         <Title>Usuarios</Title>
-        <Group>
-           <Button leftIcon={<IconUserPlus/>} onClick={() => setOpenNew(true)}>Nuevo</Button> 
-        </Group>
-        <NewUserModal opened={openNew} setOpened={setOpenNew}/>
-        <DeleteUserModal opened={openDelete} setOpened={setOpenDelete} user={userDelete}/>
+        <DeleteUserModal opened={openDelete} setOpened={setOpenDelete} user={user}/>
+        <EditUserModal opened={openEdit} setOpened={setOpenEdit} user={user}/>
         {
             loader ?
             <Center>
@@ -107,7 +108,7 @@ export default function Users(){
                                     <td>{user.email}</td>
                                     <td>
                                         {
-                                            <ActionIcon variant='filled'>
+                                            <ActionIcon variant='filled' onClick={() => handleEditUser(user)}>
                                                 <IconEdit/>
                                             </ActionIcon>
                                         }
