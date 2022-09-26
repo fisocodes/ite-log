@@ -17,13 +17,13 @@ import { signOut } from 'next-auth/react'
 import { useSession } from 'next-auth/react'
 
 //Mantine
-import { useForceUpdate } from '@mantine/hooks'
 import { Navbar } from '@mantine/core'
 import { NavLink } from '@mantine/core'
 import { Avatar } from '@mantine/core'
 import { Title } from '@mantine/core'
 import { Center } from '@mantine/core'
 import { Stack } from '@mantine/core'
+import { Divider } from '@mantine/core'
 
 //Icons
 import { IconUsers } from '@tabler/icons'
@@ -36,7 +36,6 @@ export default function CustomNavbar(){
     const router = useRouter()
     const {data: session, status} = useSession()
     const [user, setUser] = useState(null)
-    const forceUpdate = useForceUpdate()
     
     useEffect(() => {
         
@@ -57,11 +56,18 @@ export default function CustomNavbar(){
                         <Title order={4}>{`${user?.name} ${user?.lastname}`}</Title>
                     </Stack>
                 </Center>
+                <Divider/>
                 <NavLink onClick={() => router.push('/')} active={router.pathname === '/'} variant='filled' label='Dasboard' icon={<IconLayoutDashboard/>}/>
-                <NavLink onClick={() => router.push('/users')} active={router.pathname === '/users'} variant='filled' label='Usuarios' icon={<IconUsers/>}/>
+                {
+                    user?.role === 'admin' ?
+                    <NavLink onClick={() => router.push('/users')} active={router.pathname === '/users'} variant='filled' label='Usuarios' icon={<IconUsers/>}/>
+                    :
+                    null
+                }
             </Stack>
-            <Stack spacing={0}>
-                <NavLink onClick={() => signOut()} label='Cerrar sesión' color='red' active variant='light' icon={<IconLogout/>}/>
+            <Stack spacing='xs'>
+                <Divider/>
+                <NavLink onClick={() => signOut()} label='Cerrar sesión' color='red' active variant='subtle' icon={<IconLogout/>}/>
             </Stack>
         </Stack>
     </Navbar>

@@ -133,12 +133,26 @@ export default function Users(){
 export const getServerSideProps: GetServerSideProps = async (context) => {
     
     const session = await getSession(context)
+    const user = {
+        role: null,
+        ...session.user
+    }
 
     if(!session){
         return {
             redirect: {
                 permanent: false,
                 destination: '/signin',
+            },
+            props: {}
+        }
+    }
+
+    if(user.role !== 'admin'){
+        return {
+            redirect: {
+                permanent: false,
+                destination: '/',
             },
             props: {}
         }
