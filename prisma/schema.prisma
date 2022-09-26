@@ -53,3 +53,12 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+model Request {
+  id          String    @id @default(cuid())
+  date        DateTime  @default(now())
+  name        String
+  building    String
+  description String
+  status      String    @default("pending")
+}

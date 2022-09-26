@@ -29,6 +29,7 @@ import { Divider } from '@mantine/core'
 import { IconUsers } from '@tabler/icons'
 import { IconLogout } from '@tabler/icons'
 import { IconLayoutDashboard } from '@tabler/icons'
+import { IconClipboardText } from '@tabler/icons'
 
 
 export default function CustomNavbar(){
@@ -58,6 +59,7 @@ export default function CustomNavbar(){
                 </Center>
                 <Divider/>
                 <NavLink onClick={() => router.push('/')} active={router.pathname === '/'} variant='filled' label='Dasboard' icon={<IconLayoutDashboard/>}/>
+                <NavLink onClick={() => router.push('/requests')} active={router.pathname === '/requests'} variant='filled' label='Peticiones' icon={<IconClipboardText/>}/>
                 {
                     user?.role === 'admin' ?
                     <NavLink onClick={() => router.push('/users')} active={router.pathname === '/users'} variant='filled' label='Usuarios' icon={<IconUsers/>}/>
