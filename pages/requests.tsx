@@ -91,7 +91,7 @@ export default () => {
 
             const getRequests = async () => {
 
-                const response = await axios.get('http://localhost:3000/api/requests')
+                const response = await axios.get('http://10.4.4.59:3000/api/requests')
                 const requests = response.data
                 setTableRequests(requests)
 
@@ -217,10 +217,6 @@ export default () => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
     
     const session = await getSession(context)
-    const user = {
-        role: null,
-        ...session.user
-    }
 
     if(!session){
         return {
