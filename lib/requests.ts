@@ -13,7 +13,8 @@ const getRequests = async (query) => {
 
     const requests = database.request.findMany(
         {
-            where: {...query}
+            where: {...query},
+            include: {user: true}
         }
     )
 
@@ -24,7 +25,14 @@ const createRequest = async (requestData) => {
 
     const request = await database.request.create(
         {
-            data: {...requestData}
+            data: {
+                name: requestData.name,
+                building: requestData.building,
+                description: requestData.description,
+                user: {
+                    connect: {id: requestData.user}
+                }
+            }
         }
     )
 
@@ -39,7 +47,13 @@ const updateRequest = async (query) => {
             where: {
                 id: query.id
             },
-            data: query
+            data: {
+                name: query.name,
+                building: query.building,
+                description: query.description,
+                userId: query.user.id,
+                status: query.status
+            }
         },
     )
 

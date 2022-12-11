@@ -91,7 +91,7 @@ export default () => {
 
             const getRequests = async () => {
 
-                const response = await axios.get('http://localhost:3000/api/requests')
+                const response = await axios.get(`/api/requests`)
                 const requests = response.data
                 setTableRequests(requests)
 
@@ -114,9 +114,8 @@ export default () => {
             :
             <Stack>
                 <Group position='right'>
-                    <Button leftIcon={<IconClipboardPlus/>} onClick={() => setOpenNew(true)}>Nueva petición</Button>
+                    <NewRequestModal/>
                 </Group>
-                <NewRequestModal opened={openNew} setOpened={setOpenNew}/>
                 <DeleteRequestModal opened={openDelete} setOpened={setOpenDelete} request={request}/>
                 <FinishRequestModal opened={openFinish} setOpened={setOpenFinish} request={request}/>
                 <Title order={3}>Pendientes</Title>
@@ -127,6 +126,7 @@ export default () => {
                                 <th>Fecha</th>
                                 <th>Edificio</th>
                                 <th>Nombre</th>
+                                <th>Prestador</th>
                                 <th>Descripción</th>
                             </tr>
                         </thead>
@@ -137,6 +137,7 @@ export default () => {
                                         <td>{new Date(request.date).toLocaleDateString('es-MX')}</td>
                                         <td>{request.building}</td>
                                         <td>{request.name}</td>
+                                        <td>{`${request.user.name} ${request.user.lastname}`}</td>
                                         <td>{request.description}</td>
                                         <td>
                                             {
@@ -182,6 +183,7 @@ export default () => {
                                 <th>Fecha</th>
                                 <th>Edificio</th>
                                 <th>Nombre</th>
+                                <th>Prestador</th>
                                 <th>Descripción</th>
                             </tr>
                         </thead>
@@ -192,6 +194,7 @@ export default () => {
                                         <td>{new Date(request.date).toLocaleDateString('es-MX')}</td>
                                         <td>{request.building}</td>
                                         <td>{request.name}</td>
+                                        <td>{`${request.user.name} ${request.user.lastname}`}</td>
                                         <td>{request.description}</td>
                                         <td>
                                             {
@@ -217,10 +220,6 @@ export default () => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
     
     const session = await getSession(context)
-    const user = {
-        role: null,
-        ...session.user
-    }
 
     if(!session){
         return {

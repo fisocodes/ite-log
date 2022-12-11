@@ -55,6 +55,7 @@ export default () => {
         )
         
         if(response.error){
+            console.log(response.error)
             form.setErrors(
                 {
                     email: 'Correo no válido',

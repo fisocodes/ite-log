@@ -58,7 +58,7 @@ export default function CustomNavbar(){
                     </Stack>
                 </Center>
                 <Divider/>
-                <NavLink onClick={() => router.push('/')} active={router.pathname === '/'} variant='filled' label='Dasboard' icon={<IconLayoutDashboard/>}/>
+                <NavLink onClick={() => router.push('/')} active={router.pathname === '/'} variant='filled' label='Dashboard' icon={<IconLayoutDashboard/>}/>
                 <NavLink onClick={() => router.push('/requests')} active={router.pathname === '/requests'} variant='filled' label='Peticiones' icon={<IconClipboardText/>}/>
                 {
                     user?.role === 'admin' ?

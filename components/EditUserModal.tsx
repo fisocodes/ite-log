@@ -44,6 +44,8 @@ export default ({opened, setOpened, user}) => {
 
         setLoadRegister(true)
 
+        console.log(values)
+
         const editedUser = {
             ...user,
             role: values.role,
