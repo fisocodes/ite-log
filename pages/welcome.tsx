@@ -55,7 +55,7 @@ export default () => {
                 lastname : values.lastname,
             }
 
-            const response = await axios.put(`http://localhost:3000/api/users/${updatedUser.id}`, updatedUser)
+            const response = await axios.put(`http://10.4.4.59:3000/api/users/${updatedUser.id}`, updatedUser)
             console.log(response.data)
 
             if(response.error){

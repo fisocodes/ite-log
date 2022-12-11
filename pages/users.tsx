@@ -65,7 +65,7 @@ export default function Users(){
 
             const getUsers = async () => {
 
-                const response = await axios.get('http://localhost:3000/api/users')
+                const response = await axios.get('http://10.4.4.59:3000/api/users')
                 const users = response.data
                 setTableUsers(users)
 
@@ -133,11 +133,7 @@ export default function Users(){
 export const getServerSideProps: GetServerSideProps = async (context) => {
     
     const session = await getSession(context)
-    const user = {
-        role: null,
-        ...session.user
-    }
-
+    
     if(!session){
         return {
             redirect: {
@@ -146,17 +142,26 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             },
             props: {}
         }
+    }else{
+
+        const user = {
+            role: null,
+            ...session.user
+        }
+
+        if(user.role !== 'admin'){
+            return {
+                redirect: {
+                    permanent: false,
+                    destination: '/',
+                },
+                props: {}
+            }
+        }
+
     }
 
-    if(user.role !== 'admin'){
-        return {
-            redirect: {
-                permanent: false,
-                destination: '/',
-            },
-            props: {}
-        }
-    }
+    
     
     return {
         props: {}
