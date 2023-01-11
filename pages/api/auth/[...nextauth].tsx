@@ -27,7 +27,7 @@ export default NextAuth(
                     const user: User = await readUserByEmail(credentials.email)
 
                     if(user){
-                        const match = await bcrypt.compare(credentials.password, user.password) //Compare passwords
+                        const match = await bcrypt.compare(credentials.password, user.password)
 
                         if(match){
                             return user
@@ -44,17 +44,17 @@ export default NextAuth(
         callbacks: {
             async jwt({ token, user }){
                 if(user)
-                    token.user = user;
-                return token;
+                    token.user = user
+                return token
             },
             async session({ session, token }){
-                session.user = token.user;
-                return session;
+                //@ts-ignore
+                session.user = token.user
+                return session
             },
         },
         pages: {
             signIn: '/signin',
-            error: '/error',
         }
     }
 )
