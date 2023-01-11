@@ -5,10 +5,6 @@
  * September 16, 2022
  */
 
-//React
-import { useState } from 'react'
-import { useEffect } from 'react'
-
 //Next
 import { GetServerSideProps } from 'next'
 
@@ -20,113 +16,49 @@ import { Title } from '@mantine/core'
 import { Stack } from '@mantine/core'
 import { Center } from '@mantine/core'
 import { ScrollArea } from '@mantine/core'
-import { ActionIcon } from '@mantine/core'
 import { Table } from '@mantine/core'
 import { Loader } from '@mantine/core'
-
-//Icons
-import { IconUserMinus } from '@tabler/icons'
-import { IconEdit } from '@tabler/icons'
+import { Button } from '@mantine/core'
+import { Group } from '@mantine/core'
+import { openContextModal } from '@mantine/modals'
 
 //Custom components
-import DeleteUserModal from '../components/DeleteUserModal'
-import EditUserModal from '../components/EditUserModal'
+import { userForm, deleteUserForm } from '../consts'
 
-//Axios
-const axios = require('axios').default
+import useSWR from 'swr'
 
 export default function Users(){
-
-    const [tableUsers, setTableUsers] = useState([])
-    const [openDelete, setOpenDelete] = useState(false)
-    const [openEdit, setOpenEdit] = useState(false)
-    const [user, setUser] = useState({})
-    const [loader, setLoader] = useState(false)
-
-    const handleDeleteUser = (user) => {
-
-        setUser(user)
-        setOpenDelete(true)
-
-    }
-
-    const handleEditUser = (user) => {
-
-        setUser(user)
-        setOpenEdit(true)
-
-    }
-
-    //Update users table
-    useEffect(
-        () => {
-            
-            setLoader(true)
-
-            const getUsers = async () => {
-
-                const response = await axios.get('http://10.4.4.59:3000/api/users')
-                const users = response.data
-                setTableUsers(users)
-
-            }
-
-            getUsers()
-            setLoader(false)
-
-        },
-        [openDelete, openEdit]
-    )
-
+    
+    const {isLoading, data: users, mutate} = useSWR(`${process.env.NEXT_PUBLIC_LOG_URL}/api/users`)
+    
     return <Stack>
         <Title>Usuarios</Title>
-        <DeleteUserModal opened={openDelete} setOpened={setOpenDelete} user={user}/>
-        <EditUserModal opened={openEdit} setOpened={setOpenEdit} user={user}/>
-        {
-            loader ?
-            <Center>
-                <Loader size='xl'/>
-            </Center>
-            :
-            <ScrollArea>
-                <Table striped highlightOnHover>
-                    <thead>
-                        <tr>
-                            <th>Rol</th>
-                            <th>Nombre</th>
-                            <th>Apellido</th>
-                            <th>Correo</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            tableUsers.map(user => 
-                                <tr key={user.id}>
-                                    <td>{user.role}</td>
-                                    <td>{user.name}</td>
-                                    <td>{user.lastname}</td>
-                                    <td>{user.email}</td>
-                                    <td>
-                                        {
-                                            <ActionIcon variant='filled' onClick={() => handleEditUser(user)}>
-                                                <IconEdit/>
-                                            </ActionIcon>
-                                        }
-                                    </td>
-                                    <td>
-                                        {
-                                            <ActionIcon color='red' variant='filled' onClick={() => handleDeleteUser(user)}>
-                                                <IconUserMinus/>
-                                            </ActionIcon>
-                                        }
-                                    </td>
-                                </tr>
-                            )
-                        }
-                    </tbody>
-                </Table>
-            </ScrollArea>
-        } 
+        <Group>
+            <Button variant='default' radius='xs' onClick={() => openContextModal({modal: 'new', title: userForm.label, innerProps:{form: userForm, onSuccess: ()=> {}}})}>Nuevo</Button>
+        </Group>
+        <ScrollArea>
+            <Table striped highlightOnHover>
+                <thead>
+                    <tr>
+                        <th>Rol</th><th>Nombre</th><th>Apellido</th><th>Correo</th><th/>
+                    </tr>
+                </thead>
+                <tbody>
+                    {!isLoading && users.map(user => <tr key={user.id}>
+                        <td>{user.role}</td>
+                        <td>{user.name}</td>
+                        <td>{user.lastname}</td>
+                        <td>{user.email}</td>
+                        <td>
+                            <Group>
+                                <Button variant='default' radius='xs' onClick={() => openContextModal({modal: 'edit', title: userForm.label, innerProps:{form: userForm, data: user, onSuccess: mutate}})}>Editar</Button>
+                                <Button radius='xs' variant='outline' color='red' onClick={() => openContextModal({modal: 'delete', title: deleteUserForm.label, innerProps:{form: deleteUserForm, data: user, onSuccess: mutate}})}>Eliminar</Button>
+                            </Group>
+                        </td>
+                    </tr>)}
+                </tbody>
+            </Table>
+        </ScrollArea>
     </Stack>
 }
 

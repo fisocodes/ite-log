@@ -5,215 +5,87 @@
  * September 25, 2022
  */
 
-//React
-import { useState } from 'react'
-import { useEffect } from 'react'
-
 //Next
 import { GetServerSideProps } from 'next'
+import type { User } from '@prisma/client'
 
 //NextAuth
 import { getSession } from 'next-auth/react'
-import { useSession } from 'next-auth/react'
 
 //Mantine
 import { Title } from '@mantine/core'
 import { Stack } from '@mantine/core'
 import { Group } from '@mantine/core'
-import { Center } from '@mantine/core'
 import { ScrollArea } from '@mantine/core'
-import { ActionIcon } from '@mantine/core'
 import { Table } from '@mantine/core'
-import { Loader } from '@mantine/core'
 import { Button } from '@mantine/core'
 
-//Icons
-import { IconClipboardX } from '@tabler/icons'
-import { IconEdit } from '@tabler/icons'
-import { IconClipboardPlus } from '@tabler/icons'
-import { IconClipboardCheck } from '@tabler/icons'
-
 //Custom components
-import NewRequestModal from '../components/NewRequestModal'
-import DeleteRequestModal from '../components/DeleteRequestModal'
-import FinishRequestModal from '../components/FinishRequestModal'
+import { requestForm, deleteRequestForm } from '../consts'
 
-//Axios
-const axios = require('axios').default
+import { openContextModal } from '@mantine/modals'
 
-export default () => {
+import useSWR from 'swr'
 
-    const {data: session, status} = useSession()
-    const [user, setUser] = useState(null)
+export default ({user}: {user: User}) => {
 
-    const [tableRequests, setTableRequests] = useState([])
-    const [openNew, setOpenNew] = useState(false)
-    const [openDelete, setOpenDelete] = useState(false)
-    const [openEdit, setOpenEdit] = useState(false)
-    const [openFinish, setOpenFinish] = useState(false)
-    const [request, setRequest] = useState({})
-    const [loader, setLoader] = useState(false)
-
-    useEffect(() => {
-        
-        if(status == 'authenticated'){
-            setUser(session.user)
-        }
-        
-    }, [status])
-
-    const handleDeleteRequest = (request) => {
-
-        setRequest(request)
-        setOpenDelete(true)
-
-    }
-
-    const handleEditRequest = (request) => {
-
-        setRequest(request)
-        setOpenEdit(true)
-
-    }
-
-    const handleFinishRequest = (request) => {
-
-        setRequest(request)
-        setOpenFinish(true)
-
-    }
-
-    //Update requests table
-    useEffect(
-        () => {
-            
-            setLoader(true)
-
-            const getRequests = async () => {
-
-                const response = await axios.get(`/api/requests`)
-                const requests = response.data
-                setTableRequests(requests)
-
-            }
-
-            getRequests()
-            setLoader(false)
-
-        },
-        [openNew, openDelete, openEdit, openFinish]
-    )
+    const {isLoading, data: requests, mutate} = useSWR(`${process.env.NEXT_PUBLIC_LOG_URL}/api/requests`)
 
     return <Stack>
         <Title>Peticiones</Title>
-        {
-            loader ?
-            <Center>
-                <Loader size='xl'/>
-            </Center>
-            :
-            <Stack>
-                <Group position='right'>
-                    <NewRequestModal/>
-                </Group>
-                <DeleteRequestModal opened={openDelete} setOpened={setOpenDelete} request={request}/>
-                <FinishRequestModal opened={openFinish} setOpened={setOpenFinish} request={request}/>
-                <Title order={3}>Pendientes</Title>
-                <ScrollArea>
-                    <Table striped highlightOnHover>
-                        <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Edificio</th>
-                                <th>Nombre</th>
-                                <th>Prestador</th>
-                                <th>Descripción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                tableRequests.filter(request => request.status === 'pending').map(request => 
-                                    <tr key={request.id}>
-                                        <td>{new Date(request.date).toLocaleDateString('es-MX')}</td>
-                                        <td>{request.building}</td>
-                                        <td>{request.name}</td>
-                                        <td>{`${request.user.name} ${request.user.lastname}`}</td>
-                                        <td>{request.description}</td>
-                                        <td>
-                                            {
-                                                user?.role === 'admin' ?
-                                                <ActionIcon color='green' variant='filled' onClick={() => handleFinishRequest(request)}>
-                                                    <IconClipboardCheck/>
-                                                </ActionIcon>
-                                                :
-                                                null
-                                            }
-                                        </td>
-                                        <td>
-                                            {
-                                                user?.role === 'admin' ?
-                                                <ActionIcon variant='filled' onClick={() => handleEditRequest(request)}>
-                                                    <IconEdit/>
-                                                </ActionIcon>
-                                                :
-                                                null
-                                            }
-                                        </td>
-                                        <td>
-                                            {
-                                                user?.role === 'admin' ?
-                                                <ActionIcon color='red' variant='filled' onClick={() => handleDeleteRequest(request)}>
-                                                    <IconClipboardX/>
-                                                </ActionIcon>
-                                                :
-                                                null
-                                            }
-                                        </td>
-                                    </tr>
-                                )
-                            }
-                        </tbody>
-                    </Table>
-                </ScrollArea>
-                <Title order={3}>Finalizadas</Title>
-                <ScrollArea>
-                    <Table striped highlightOnHover>
-                        <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Edificio</th>
-                                <th>Nombre</th>
-                                <th>Prestador</th>
-                                <th>Descripción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                tableRequests.filter(request => request.status === 'done').map(request => 
-                                    <tr key={request.id}>
-                                        <td>{new Date(request.date).toLocaleDateString('es-MX')}</td>
-                                        <td>{request.building}</td>
-                                        <td>{request.name}</td>
-                                        <td>{`${request.user.name} ${request.user.lastname}`}</td>
-                                        <td>{request.description}</td>
-                                        <td>
-                                            {
-                                                user?.role === 'admin' ?
-                                                <ActionIcon color='red' variant='filled' onClick={() => handleDeleteRequest(request)}>
-                                                    <IconClipboardX/>
-                                                </ActionIcon>
-                                                :
-                                                null
-                                            }
-                                        </td>
-                                    </tr>
-                                )
-                            }
-                        </tbody>
-                    </Table>
-                </ScrollArea>
-            </Stack>
-        } 
+        <Group>
+            <Button variant='default' radius='xs' onClick={() => openContextModal({modal: 'new', title: requestForm.label, innerProps:{form: requestForm, onSuccess: mutate}})}>Nuevo</Button>
+        </Group>
+        <Title order={3}>Pendientes</Title>
+        <ScrollArea>
+            <Table striped highlightOnHover>
+                <thead>
+                    <tr>
+                        <th>Fecha</th><th>Edificio</th><th>Nombre</th><th>Prestador</th><th>Descripción</th><th/>
+                    </tr>
+                </thead>
+                <tbody>
+                    {!isLoading && requests.filter(request => request.status === 'pending').map(request => <tr key={request.id}>
+                        <td>{new Date(request.date).toLocaleDateString()}</td>
+                        <td>{request.building}</td>
+                        <td>{request.name}</td>
+                        <td>{`${request.user.name} ${request.user.lastname}`}</td>
+                        <td>{request.description}</td>
+                        <td>
+                            <Group>
+                                {user.role === 'admin' && <Button variant='default' radius='xs' onClick={() => openContextModal({modal: 'edit', title: requestForm.label, innerProps:{form: requestForm, data: request, onSuccess: mutate}})}>Editar</Button>}
+                                {user.role === 'admin' && <Button radius='xs' variant='outline' color='red' onClick={() => openContextModal({modal: 'delete', title: deleteRequestForm.label, innerProps:{form: deleteRequestForm, data: request, onSuccess: mutate}})}>Eliminar</Button>}
+                            </Group>
+                        </td>
+                    </tr>)}
+                </tbody>
+            </Table>
+        </ScrollArea>
+        <Title order={3}>Pendientes</Title>
+        <ScrollArea>
+            <Table striped highlightOnHover>
+                <thead>
+                    <tr>
+                        <th>Fecha</th><th>Edificio</th><th>Nombre</th><th>Prestador</th><th>Descripción</th><th/>
+                    </tr>
+                </thead>
+                <tbody>
+                    {!isLoading && requests.filter(request => request.status === 'done').map(request => <tr key={request.id}>
+                        <td>{new Date(request.date).toLocaleDateString()}</td>
+                        <td>{request.building}</td>
+                        <td>{request.name}</td>
+                        <td>{`${request.user.name} ${request.user.lastname}`}</td>
+                        <td>{request.description}</td>
+                        <td>
+                            <Group>
+                                {user.role === 'admin' && <Button variant='default' radius='xs' onClick={() => openContextModal({modal: 'edit', title: requestForm.label, innerProps:{form: requestForm, data: request, onSuccess: mutate}})}>Editar</Button>}
+                                {user.role === 'admin' && <Button radius='xs' variant='outline' color='red' onClick={() => openContextModal({modal: 'delete', title: deleteRequestForm.label, innerProps:{form: deleteRequestForm, data: request, onSuccess: mutate}})}>Eliminar</Button>}
+                            </Group>
+                        </td>
+                    </tr>)}
+                </tbody>
+            </Table>
+        </ScrollArea>
     </Stack>
 }
 
@@ -232,6 +104,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
     
     return {
-        props: {}
+        props: {user: session.user}
     }
 }

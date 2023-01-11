@@ -6,6 +6,13 @@
       "dom.iterable",
       "esnext"
     ],
+    "baseUrl": ".",
+    "paths": {
+      "@/components/*": ["components/*"],
+      "@/consts/*": ["consts/*"],
+      "@/prisma/*": ["prisma/*"],
+      "@/types/*": ["types/*"]
+    },
     "moduleResolution": "node",
     "allowJs": true,
     "skipLibCheck": true,

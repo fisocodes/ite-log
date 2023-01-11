@@ -2,23 +2,27 @@
  * Users API endpoint
  * @author Oscar Figueroa
  * @version 1.0.0
- * September 18, 2022
+ * January 3, 2023
  */
 
-//Next
-import type { NextApiRequest } from 'next'
-import type { NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
+import type { User } from '@prisma/client'
 
-//Custom libraries
-import { getUsers } from '../../../lib/users'
+import { readUsers, createUser } from '@/prisma/users'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     switch(req.method){
 
+        case 'POST':
+
+            const createdUser: User = await createUser(req.body)
+            res.json(createdUser)
+            break
+
         case 'GET':
 
-            const users = await getUsers(req.body)
+            const users: User[] = await readUsers(req.body)
             res.json(users)
             break
 

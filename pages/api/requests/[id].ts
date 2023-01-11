@@ -5,13 +5,10 @@
  * September 25, 2022
  */
 
-//Next
-import type { NextApiRequest } from 'next'
-import type { NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
+import type { Request } from '@prisma/client'
 
-//Custom libs
-import { updateRequest } from '../../../lib/requests'
-import { deleteRequest } from '../../../lib/requests'
+import { updateRequest, deleteRequest } from '@/prisma/requests'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
 
@@ -19,13 +16,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         
         case 'PUT':
             
-            const updatedRequest = await updateRequest(req.body)
+            const updatedRequest: Request = await updateRequest(req.body)
             res.json(updatedRequest)
             break
         
         case 'DELETE':
 
-            const deletedRequest = await deleteRequest(req.query)
+            const deletedRequest: Request = await deleteRequest(typeof req.query.id === 'string' && req.query.id)
             res.json(deletedRequest)
             break
 

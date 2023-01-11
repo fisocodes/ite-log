@@ -2,16 +2,13 @@
  * User ID API endpoint
  * @author Oscar Figueroa
  * @version 1.0.0
- * September 18, 2022
+ * January 3, 2023
  */
 
-//Next
-import type { NextApiRequest } from 'next'
-import type { NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
+import type { User } from '@prisma/client'
 
-//Custom libs
-import { updateUser } from '../../../lib/users'
-import { deleteUser } from '../../../lib/users'
+import { updateUser, deleteUser } from '@/prisma/users'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
 
@@ -19,13 +16,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         
         case 'PUT':
             
-            const updatedUser = await updateUser(req.body)
+            const updatedUser: User = await updateUser(req.body)
             res.json(updatedUser)
             break
         
         case 'DELETE':
 
-            const deletedUser = await deleteUser(req.query)
+            const deletedUser: User = await deleteUser(typeof req.query.id === 'string' && req.query.id)
             res.json(deletedUser)
             break
 

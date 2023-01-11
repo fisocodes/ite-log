@@ -2,16 +2,13 @@
  * Requests API endpoint
  * @author Oscar Figueroa
  * @version 1.0.0
- * September 18, 2022
+ * Juanary 3, 2022
  */
 
-//Next
-import type { NextApiRequest } from 'next'
-import type { NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next'
+import type { Request } from '@prisma/client'
 
-//Custom libraries
-import { getRequests } from '../../../lib/requests'
-import { createRequest } from '../../../lib/requests'
+import { createRequest, readRequests } from '@/prisma/requests'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
 
@@ -19,13 +16,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
         case 'GET':
 
-            const requests = await getRequests(req.query)
+            const requests: Request[] = await readRequests(req.query)
             res.json(requests)
             break
         
         case 'POST':
 
-            const request = await createRequest(req.body)
+            const request: Request = await createRequest(req.body)
             res.json(request)
             break
 
